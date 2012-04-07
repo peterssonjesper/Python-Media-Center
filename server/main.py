@@ -42,7 +42,7 @@ if __name__ == "__main__":
 		collector.start()
 
 	if startServer:
-		print "Starting server at " + str(config.hostname) + ":" + str(config.port)
+		print "Starting server at " + str(config.ip) + ":" + str(config.port)
 		api = Api(db, s)
 
 		print "Now listening..."
