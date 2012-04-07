@@ -1,0 +1,38 @@
+PMC is a super lightweight media center solution written in python.
+It consists of two parts, a server and a player. The player can play pretty much
+everything that mplayer can handle plus rar-files, the server analyses the data and contributes
+with titles, ratings, posters and more.
+
+========
+ Player 
+========
+Should run on the machine that is connected to the monitor. The player will communicate
+with the server to find out what movies and tv series that are available. The server IP and port
+need to be set (!), see config.py.
+
+Usage:
+./main.py
+
+Configuration:
+See config.py
+
+Permissions:
+In order to be able to play rar-files, fuse and rarfs is needed. The user that runs the player must
+have permission to mount the rar-files. Place the following line in /etc/sudoers (where username is the user):
+username	ALL = NOPASSWD: /bin/fusermount, /sbin/mount.fuse, /usr/bin/fusermount
+
+========
+ Server
+========
+Should run on the machine that have (fast) access to all the movies and TV series, this could
+be the same machine as the one that runs player. The server IP and port need to be set (!), see config.py.
+
+The server should share directories with the player machine using for example nfs, sshfs, samba, netatalk etc. The
+mapping of what directory is mounted where is configured by the player in config.py. The server can control what directories
+to index by setting this in config.py as well.
+
+Usage:
+./main.py [--no-initsync] [--no-server] [--no-collector]
+
+Configuration:
+See config.py
