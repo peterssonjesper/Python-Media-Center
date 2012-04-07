@@ -6,6 +6,7 @@ sys.path.insert(0, run_folder + "/core")
 
 from db import *
 from threading import Thread
+from urllib import urlretrieve
 
 class Collector(Thread):
 	def __init__(self):
@@ -30,6 +31,8 @@ class Collector(Thread):
 					data = json.loads(json_data)
 					if 'ID' in data.keys():
 						db.insertMetadata(media_id, data);
+						if data['Poster'] and len(data['Poster']) > 4:
+							urlretrieve(data['Poster'], "posters/" + str(media_id) + ".jpg")
 					else:
 						db.updateMetadataId(media_id, -1)
 				except:

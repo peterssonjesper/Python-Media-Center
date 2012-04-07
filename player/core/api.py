@@ -13,7 +13,13 @@ class Api:
 	def getMovies(self):
 		return self.sendData({"cmd" : "getmovies"})
 
-	def sendData(self, data):
+	def getMetadata(self, media_id):
+		return self.sendData({"cmd" : "getmetadata", "media_id" : media_id})
+
+	def getPoster(self, media_id):
+		return self.sendData({"cmd" : "getposter", "media_id" : media_id}, False)
+
+	def sendData(self, data, retJson = True):
 		try:
 			s = socket.socket() 
 			s.connect((config.server_ip, config.server_port))
@@ -25,7 +31,10 @@ class Api:
 					break
 				ans = ans + tmp 
 			s.close()
-			return json.loads(ans)
+			if retJson:
+				return json.loads(ans)
+			else:
+				return ans
 		except:
 			print "Could not connect to server..."
 			return False

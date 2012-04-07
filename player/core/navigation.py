@@ -9,10 +9,11 @@ class Navigation:
 		self.window = window
 		self.msg = Msg(self.window);
 		self.listView.onAction(self.onListViewAction)
+		self.listView.onHover(self.onListViewHover)
 		self.api = api
 
 	def showRoot(self, takeFocus = True):
-		self.listView.setTitle("Welcome!");
+		self.listView.setLeftTitle("Welcome!");
 		self.currentView = "root"
 		mainMenu = [ListItem("Movies"), ListItem("TV")]
 		mainMenu[0].setAttr("category", "movies")
@@ -22,7 +23,7 @@ class Navigation:
 			self.window.setFocus("listview")
 	
 	def showSeries(self):
-		self.listView.setTitle("TV Series");
+		self.listView.setLeftTitle("TV Series");
 		self.currentView = "tv"
 		listItems = []
 		for i in self.api.getSeries():
@@ -34,7 +35,7 @@ class Navigation:
 		self.window.setFocus("listview")
 
 	def showMovies(self):
-		self.listView.setTitle("Movies");
+		self.listView.setLeftTitle("Movies");
 		self.currentView = "movies"
 		listItems = []
 		for i in self.api.getMovies():
@@ -47,7 +48,7 @@ class Navigation:
 		self.window.setFocus("listview")
 
 	def showSeasons(self, media_id, title):
-		self.listView.setTitle("TV Series / " + title);
+		self.listView.setLeftTitle("TV Series / " + title);
 		self.currentView = "seasons"
 		listItems = []
 		for i in self.api.getSeasons(media_id):
@@ -70,7 +71,7 @@ class Navigation:
 			l.setAttr("file", File(i['base_dir'], i['inner_dir'], i['filename']))
 			listItems.append(l)
 			title = i['title']
-		self.listView.setTitle("TV Series / " + title + " / Season " + str(season));
+		self.listView.setLeftTitle("TV Series / " + title + " / Season " + str(season));
 		self.listView.setListItems(listItems);
 		self.window.setFocus("listview")
 	
@@ -83,6 +84,34 @@ class Navigation:
 			self.api.resync()
 			self.msg.viewMsg("Sync complete!")
 			self.showRoot(False)
+
+	def onListViewHover(self, item):
+		if self.currentView == "root":
+			self.listView.setRightTitle("")
+			self.listView.unsetDetailedInfo();
+		elif self.currentView == "movies" or self.currentView == "tv":
+			metadata = self.api.getMetadata(item.getAttr("media_id"))
+			s = ""
+			if metadata['plot']:
+				s += metadata['plot'] + "\n\n"
+			if metadata['rating']:
+				s += metadata['rating'] + " / 10.0\n"
+			if metadata['runtime']:
+				s += metadata['runtime'] + "\n"
+			if metadata['runtime'] or metadata['rating']:
+				s += "\n"
+			if metadata['released']:
+				s += "Released " + metadata['released'] + "\n"
+			if metadata['genre']:
+				s += "Genre: " + metadata['genre'] + "\n"
+			if metadata['director']:
+				s += "Director: " + metadata['director'] + "\n"
+			if metadata['writer']:
+				s += "Writer: " + metadata['writer'] + "\n"
+			if metadata['actors']:
+				s += "Actors: " + metadata['actors'] + "\n"
+			self.listView.setRightTitle(item.getAttr("title"));
+			self.listView.setDetailedInfo(s, self.api.getPoster(item.getAttr("media_id")))
 
 	def onSelection(self, item):
 		if self.currentView == "root":

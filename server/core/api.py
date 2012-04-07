@@ -59,13 +59,28 @@ class Api:
 					self.db.getCursor().execute(q, [media_id])
 					row = self.db.getCursor().fetchone()
 
-					q = "select rating, year from metadata where id=?"
+					q = "select rating, year, released, genre, director, writer, actors, plot, poster, runtime from metadata where id=?"
 					self.db.getCursor().execute(q, row)
 					row = self.db.getCursor().fetchone()
 					rating = row[0] if row else ""
 					year = row[1] if row else ""
-					ans = {"rating" : rating, "year" : year}
+					released = row[3] if row else ""
+					genre = row[3] if row else ""
+					director = row[4] if row else ""
+					writer = row[5] if row else ""
+					actors = row[6] if row else ""
+					plot = row[7] if row else ""
+					poster = row[8] if row else ""
+					runtime = row[9] if row else ""
+					ans = {"rating" : rating, "year" : year, "released" : released, "genre" : genre, "director" : director, "writer" : writer, "actors" : actors, "plot" : plot, "poster" : poster, "runtime" : runtime}
 					c.send(json.dumps(ans))
+
+				if data['cmd'] == "getposter":
+					media_id = data['media_id']
+					path = "posters/" + str(media_id) + ".jpg" if os.path.exists("posters/" + str(media_id) + ".jpg") else "posters/unknown.jpg"
+					f = open(path, "r")
+					c.send(f.read())
+					f.close()
 
 				if data['cmd'] == "getmovies":
 					q = "select filename, inner_dir, base_dir, media_id, media.title, metadata.title from files join media on media.id = files.media_id left outer join metadata on metadata.id = media.metadata_id where media_type = 2 order by media.title"

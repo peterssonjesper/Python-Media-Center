@@ -24,7 +24,7 @@ class Db:
 	def create_db(self):
 		self.cursor.execute('''create table files ( id integer primary key autoincrement, filename text, inner_dir text, base_dir text, season integer, episode integer, media_id integer, media_type integer, failbit integer)''')
 		self.cursor.execute('''create table media ( id integer primary key autoincrement, title text, metadata_id text)''')
-		self.cursor.execute('''create table metadata ( id integer primary key autoincrement, imdb_id text, title text, rating text, year text, releasesd text, genre text, director text, writer text, actors text, plot text, poster text, runtime text)''')
+		self.cursor.execute('''create table metadata ( id integer primary key autoincrement, imdb_id text, title text, rating text, year text, released text, genre text, director text, writer text, actors text, plot text, poster text, runtime text)''')
 	
 	# Insert a new media to DB
 	def insert_file(self, data):
