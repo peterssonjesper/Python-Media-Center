@@ -83,6 +83,7 @@ class Navigation:
 		elif action == "esc":
 			self.onEscape(item)
 		elif action == "f5":
+			self.msg.viewMsg("Syncing...")
 			self.api.resync()
 			self.msg.viewMsg("Sync complete!")
 			self.showRoot(False)
@@ -139,18 +140,14 @@ class Navigation:
 			self.listView.printListItems();
 
 		elif self.currentView == "episodes":
-			s = str(item.getAttr("season"))
-			if len(s) == 1:
-				s = "0" + s
-			e = str(item.getAttr("episode"))
-			if len(e) == 1:
-				e = "0" + e
-			self.msg.viewMsg("Will now play\n\n" + item.getAttr("title") + " S" + s + "E" + e)
+			self.msg.viewMsg("Loading episode, please wait...")
 			self.player.play_file(item.getAttr("file").get_path())
+			self.player.onStarted(self.msg.hideMsg);
 
 		elif self.currentView == "movies":
-			self.msg.viewMsg("Will now play\n\n" + item.getAttr("title"))
+			self.msg.viewMsg("Loading movie, please wait...")
 			self.player.play_file(item.getAttr("file").get_path())
+			self.player.onStarted(self.msg.hideMsg);
 
 	def onEscape(self, listItem):
 		if self.currentView == "tv" or self.currentView == "movies":

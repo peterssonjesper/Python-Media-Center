@@ -14,6 +14,8 @@ class Window:
 		self.keyPressRegisters = []
 		self.focusedWindow = False
 
+		self.focusStack = []
+
 	def setBackgroundImage(self):
 		self.bg = Canvas(self.root, width=self.resolution['width'], height=self.resolution['height'], bg="black", highlightthickness=0);
 		self.bg.img = ImageTk.PhotoImage(file="gui/images/bg.png");
@@ -52,8 +54,9 @@ class Window:
 				break
 	
 	def setFocus(self, windowId):
-		self.lastFocus = self.focusedWindow
-		self.focusedWindow = windowId;
+		self.focusStack = self.focusStack + [self.focusedWindow]
+		self.focusedWindow = windowId
 	
 	def restoreFocus(self):
-		self.setFocus(self.lastFocus)
+		self.focusedWindow = self.focusStack[-1]
+		self.focusStack = self.focusStack[:-1]
