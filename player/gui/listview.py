@@ -1,6 +1,7 @@
 from Tkinter import *
 from window import *
 import ImageTk
+from threading import Timer
 
 class ListView:
 	def __init__(self, window):
@@ -17,17 +18,13 @@ class ListView:
 		self.max_positions = int((self.window.get_resolution()['height']-70)/50.0-1)
 		self.hl_img = ImageTk.PhotoImage(file="gui/images/highlighter.png");
 		self.window.register("listview", self.keypressAction)
+		self.hoverTime = 0.05
+		self.hoverTimer = Timer(self.hoverTime, self.triggerHoverFn);
 	
 	def setListItems(self, new_items):
 		self.listItems = new_items;
 		self.scope = [0, min(self.max_positions, len(self.listItems))]
 		self.hlPos = 0
-		try:
-			self.window.get_bg().delete(self.hl)
-		except:
-			pass
-		self.hl = self.window.get_bg().create_image(10, 110, image=self.hl_img, anchor="nw");
-		self.printListItems();
 
 	def setLeftTitle(self, title):
 		if self.leftTitle:
@@ -55,17 +52,25 @@ class ListView:
 		if self.poster:
 			self.window.get_bg().delete(self.poster)
 	
-	def printListItems(self):
-		for l in self.labels:
-			self.window.get_bg().delete(l)
-		self.labels = []
-		y_offset = 1
-		for i in range(self.scope[0], self.scope[1]):
-			f = self.listItems[i]
-			self.labels.append(self.window.get_bg().create_text(25, 70+y_offset*50, text=f.get_label(), anchor="nw", fill="white", font=("Helvectica", "24"), width=800));
-			y_offset += 1
+	def printListItems(self, oldValues = [-1, -1, -1]):
+		if oldValues[2] != self.hlPos:
+			try:
+				self.window.get_bg().delete(self.hl)
+			except:
+				pass
+			self.hl = self.window.get_bg().create_image(10, 110+50*self.hlPos, image=self.hl_img, anchor="nw");
+		if oldValues[0] != self.scope[0] or oldValues[1] != self.scope[1]:
+			for l in self.labels:
+				self.window.get_bg().delete(l)
+			self.labels = []
+			y_offset = 1
+			for i in range(self.scope[0], self.scope[1]):
+				f = self.listItems[i]
+				self.labels.append(self.window.get_bg().create_text(25, 70+y_offset*50, text=f.get_label(), anchor="nw", fill="white", font=("Helvectica", "24"), width=800));
+				y_offset += 1
 
 	def keypressAction(self, event):
+		oldVals = self.getSelectedIndex()
 		if event.keycode == 8255233 or event.keycode == 116: # Arrow down
 			if self.hlPos < self.max_positions-1 and self.hlPos < len(self.listItems)-1:
 				self.hlPos += 1
@@ -74,30 +79,20 @@ class ListView:
 			elif self.scope[1] < len(self.listItems):
 				self.scope[0] += 1
 				self.scope[1] += 1
-				self.printListItems();
+				self.printListItems(oldVals);
 				self.triggerHover();
 
 		elif event.keycode == 7993133 or event.keycode == 117: # Page down
-			if self.hlPos < min(self.max_positions-1, len(self.listItems)-1): # The hl is not at the bottom
-				self.window.get_bg().move(self.hl, 0, 50*(min(self.max_positions-self.hlPos-1, len(self.listItems)-1)));
-				self.hlPos = min(self.max_positions-1, len(self.listItems)-1)
-				self.triggerHover();
-			elif self.hlPos == self.max_positions-1: # Hl at bottom
-				self.scope[1] = min(self.max_positions+self.scope[1], len(self.listItems)-1)
-				self.scope[0] = self.scope[1] - min(self.max_positions, self.listItems)
-				self.printListItems();
-				self.triggerHover();
+			self.scope[1] = min(self.max_positions+self.scope[1], len(self.listItems))
+			self.scope[0] = max(self.scope[1] - min(self.max_positions, self.listItems), 0)
+			self.printListItems(oldVals);
+			self.triggerHover();
 
 		elif event.keycode == 7665452 or event.keycode == 112: # Page up
-			if self.hlPos != 0: # The hl is not at the top
-				self.window.get_bg().move(self.hl, 0, -50*self.hlPos);
-				self.hlPos = 0;
-				self.triggerHover();
-			else: # Hl at top
-				self.scope[0] = max(0, self.scope[0]-self.max_positions)
-				self.scope[1] = min(self.max_positions+self.scope[0], len(self.listItems))
-				self.printListItems();
-				self.triggerHover();
+			self.scope[0] = max(0, self.scope[0]-self.max_positions)
+			self.scope[1] = min(self.max_positions+self.scope[0], len(self.listItems))
+			self.printListItems(oldVals);
+			self.triggerHover();
 
 		elif event.keycode == 8320768 or event.keycode == 111: # Arrow up
 			if self.hlPos > 0:
@@ -107,7 +102,7 @@ class ListView:
 			elif self.scope[0] > 0:
 				self.scope[0] -= 1
 				self.scope[1] -= 1
-				self.printListItems();
+				self.printListItems(oldVals);
 				self.triggerHover();
 
 		elif event.keycode == 2359309 or event.keycode == 36: # Enter
@@ -131,6 +126,11 @@ class ListView:
 			print "Keypress: No match for key " + str(event.keycode)
 	
 	def triggerHover(self):
+		self.hoverTimer.cancel();
+		self.hoverTimer = Timer(self.hoverTime, self.triggerHoverFn);
+		self.hoverTimer.start()
+	
+	def triggerHoverFn(self):
 		currentItem = self.scope[0]+self.hlPos
 		if len(self.listItems) > currentItem:
 			self.onHoverFn(self.listItems[currentItem])
@@ -140,6 +140,14 @@ class ListView:
 
 	def onHover(self, fn):
 		self.onHoverFn = fn
+	
+	def getSelectedIndex(self):
+		return [self.scope[0], self.scope[1], self.hlPos]
+	
+	def setSelectedIndex(self, index):
+		self.scope[0] = index[0]
+		self.scope[1] = index[1]
+		self.hlPos = index[2]
 
 class ListItem:
 	def __init__(self, label):

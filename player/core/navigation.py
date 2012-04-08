@@ -12,6 +12,8 @@ class Navigation:
 		self.listView.onHover(self.onListViewHover)
 		self.api = api
 
+		self.traceStack = [];
+
 	def showRoot(self, takeFocus = True):
 		self.listView.setLeftTitle("Welcome!");
 		self.currentView = "root"
@@ -84,6 +86,7 @@ class Navigation:
 			self.api.resync()
 			self.msg.viewMsg("Sync complete!")
 			self.showRoot(False)
+			self.listView.printListItems();
 
 	def onListViewHover(self, item):
 		if self.currentView == "root":
@@ -118,16 +121,22 @@ class Navigation:
 
 	def onSelection(self, item):
 		if self.currentView == "root":
+			self.traceStack += [self.listView.getSelectedIndex()]
 			if item.getAttr("category") == "tv": # List TV
 				self.showSeries()
 			else: # List movies
 				self.showMovies()
+			self.listView.printListItems();
 
 		elif self.currentView == "tv":
+			self.traceStack += [self.listView.getSelectedIndex()]
 			self.showSeasons(item.getAttr("media_id"), item.getAttr("title"))
+			self.listView.printListItems();
 
 		elif self.currentView == "seasons":
+			self.traceStack += [self.listView.getSelectedIndex()]
 			self.showEpisodes(item.getAttr("media_id"), item.getAttr("season"))
+			self.listView.printListItems();
 
 		elif self.currentView == "episodes":
 			s = str(item.getAttr("season"))
@@ -150,3 +159,7 @@ class Navigation:
 			self.showSeries()
 		elif self.currentView == "episodes":
 			self.showSeasons(listItem.getAttr("media_id"), listItem.getAttr("title"))
+		if len(self.traceStack) > 0:
+			self.listView.setSelectedIndex(self.traceStack[-1])
+			self.traceStack = self.traceStack[:-1]
+		self.listView.printListItems();

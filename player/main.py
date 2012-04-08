@@ -20,6 +20,7 @@ class App:
 		self.navigation = Navigation(self.listView, self.player, self.api, self.window)
 
 		self.navigation.showRoot()
+		self.listView.printListItems();
 
 		self.window.render()
 
