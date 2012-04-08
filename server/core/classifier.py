@@ -60,7 +60,7 @@ class Classifier:
 			try:
 				res = res.groups()
 				name = ""
-				for s in res[0].split("."):
+				for s in res[0].replace("_", ".").split("."):
 					name = name + s[0].upper() + s[1:] + " "
 				name = name[:-1]
 
@@ -92,7 +92,7 @@ class Classifier:
 			if res:
 				res = res.groups()
 				name = ""
-				for s in res[0].split("."):
+				for s in res[0].replace("_", ".").split("."):
 					if len(s) > 1:
 						name = name + s[0].upper() + s[1:] + " "
 					elif len(s) == 1:
