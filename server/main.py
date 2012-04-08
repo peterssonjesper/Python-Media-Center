@@ -1,6 +1,6 @@
-import sys, os, inspect, getopt, config
+import sys, os, getopt, config
 
-run_folder = os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0])
+run_folder = os.path.abspath(os.path.dirname(sys.argv[0]))
 sys.path.insert(0, run_folder + "/core")
 
 from api import *

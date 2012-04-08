@@ -1,6 +1,7 @@
 #! /usr/bin/python
-import config, os, inspect, sys
-run_folder = os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0])
+import config, os, sys
+
+run_folder = os.path.abspath(os.path.dirname(sys.argv[0]))
 sys.path.insert(0, run_folder + "/gui")
 sys.path.insert(0, run_folder + "/core")
 
