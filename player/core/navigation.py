@@ -92,24 +92,27 @@ class Navigation:
 		elif self.currentView == "movies" or self.currentView == "tv":
 			metadata = self.api.getMetadata(item.getAttr("media_id"))
 			s = ""
-			if metadata['plot']:
-				s += metadata['plot'] + "\n\n"
-			if metadata['rating']:
-				s += metadata['rating'] + " / 10.0\n"
-			if metadata['runtime']:
-				s += metadata['runtime'] + "\n"
-			if metadata['runtime'] or metadata['rating']:
-				s += "\n"
-			if metadata['released']:
-				s += "Released " + metadata['released'] + "\n"
-			if metadata['genre']:
-				s += "Genre: " + metadata['genre'] + "\n"
-			if metadata['director']:
-				s += "Director: " + metadata['director'] + "\n"
-			if metadata['writer']:
-				s += "Writer: " + metadata['writer'] + "\n"
-			if metadata['actors']:
-				s += "Actors: " + metadata['actors'] + "\n"
+			try:
+				if metadata['plot']:
+					s += metadata['plot'] + "\n\n"
+				if metadata['rating']:
+					s += metadata['rating'] + " / 10.0\n"
+				if metadata['runtime']:
+					s += metadata['runtime'] + "\n"
+				if metadata['runtime'] or metadata['rating']:
+					s += "\n"
+				if metadata['released']:
+					s += "Released " + metadata['released'] + "\n"
+				if metadata['genre']:
+					s += "Genre: " + metadata['genre'] + "\n"
+				if metadata['director']:
+					s += "Director: " + metadata['director'] + "\n"
+				if metadata['writer']:
+					s += "Writer: " + metadata['writer'] + "\n"
+				if metadata['actors']:
+					s += "Actors: " + metadata['actors'] + "\n"
+			except:
+				pass
 			self.listView.setRightTitle(item.getAttr("title"));
 			self.listView.setDetailedInfo(s, self.api.getPoster(item.getAttr("media_id")))
 

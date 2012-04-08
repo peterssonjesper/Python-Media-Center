@@ -60,11 +60,11 @@ class Api:
 					row = self.db.getCursor().fetchone()
 
 					q = "select rating, year, released, genre, director, writer, actors, plot, poster, runtime from metadata where id=?"
-					self.db.getCursor().execute(q, row)
+					self.db.getCursor().execute(q, [row[0]])
 					row = self.db.getCursor().fetchone()
 					rating = row[0] if row else ""
 					year = row[1] if row else ""
-					released = row[3] if row else ""
+					released = row[2] if row else ""
 					genre = row[3] if row else ""
 					director = row[4] if row else ""
 					writer = row[5] if row else ""
