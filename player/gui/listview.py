@@ -32,12 +32,12 @@ class ListView:
 	def setLeftTitle(self, title):
 		if self.leftTitle:
 			self.window.get_bg().delete(self.leftTitle)
-		self.leftTitle = self.window.get_bg().create_text(35, 27, text=title, fill="white", anchor="nw", font=("Helvectica", "36"));
+		self.leftTitle = self.window.get_bg().create_text(35, 30, text=title, fill="white", anchor="nw", font=("Helvectica", "36"));
 
 	def setRightTitle(self, title):
 		if self.rightTitle:
 			self.window.get_bg().delete(self.rightTitle)
-		self.rightTitle = self.window.get_bg().create_text(self.window.get_resolution()['width']-35, 27, text=title, fill="white", anchor="ne", font=("Helvectica", "36"));
+		self.rightTitle = self.window.get_bg().create_text(self.window.get_resolution()['width']-35, 30, text=title, fill="white", anchor="ne", font=("Helvectica", "36"));
 
 	def setDetailedInfo(self, info, posterData = False):
 		self.unsetDetailedInfo()
@@ -47,7 +47,7 @@ class ListView:
 				self.poster = self.window.get_bg().create_image(self.window.get_resolution()['width']-40, 110, image=self.posterData, anchor="ne");
 			except:
 				pass
-		self.detailedInfo = self.window.get_bg().create_text(self.window.get_resolution()['width']-350, 600, text=info, fill="white", anchor="nw", font=("Helvectica", "16"), width=320);
+		self.detailedInfo = self.window.get_bg().create_text(self.window.get_resolution()['width']-350, 630, text=info, fill="white", anchor="nw", font=("Helvectica", "19"), width=320);
 
 	def unsetDetailedInfo(self):
 		if self.detailedInfo:
