@@ -22,9 +22,10 @@ class Db:
 	
 	# Creates a new clean db
 	def create_db(self):
-		self.cursor.execute('''create table files ( id integer primary key autoincrement, filename text, inner_dir text, base_dir text, season integer, episode integer, media_id integer, media_type integer, failbit integer)''')
-		self.cursor.execute('''create table media ( id integer primary key autoincrement, title text, metadata_id text)''')
-		self.cursor.execute('''create table metadata ( id integer primary key autoincrement, imdb_id text, title text, rating text, year text, released text, genre text, director text, writer text, actors text, plot text, poster text, runtime text)''')
+		self.cursor.execute('''create table files ( id integer primary key autoincrement, filename text, inner_dir text, base_dir text, media_id integer, media_type integer, quality text, failbit integer)''')
+		self.cursor.execute('''create table series ( id integer primary key autoincrement, name text, title text, imdb_id text, rating real, num_ratings integer, actors text, aired text, genre text, overview text, series_id integer, fetched integer )''')
+		self.cursor.execute('''create table episodes ( id integer primary key autoincrement, title text, season integer, episode integer, series_id integer, episode_id integer, imdb_id text, rating real, num_ratings integer, guest_actors text, aired text, overview text, director text, writer text, watched integer )''')
+		self.cursor.execute('''create table movies ( id integer primary key autoincrement, name text, title text, imdb_id text, rating text, year text, released text, genre text, director text, writer text, actors text, overview text, runtime text, watched integer)''')
 	
 	# Insert a new media to DB
 	def insert_file(self, data):
