@@ -5,11 +5,15 @@ working_folder = os.path.abspath(os.path.dirname(sys.argv[0]))
 # master: Runs database and player
 # server: Runs database only
 # slave: Runs player only, conncets to remote database
-mode = "master"
+mode = "server"
 
 ### If an initial sync should be performed when starting
 # Applies to modes: Master, server
 initsync = True
+
+### If the database should be dynamically updated on changes in watchdirs
+# Applies to modes: Master, server (Only implemented on Linux)
+dynamicWatch = True
 
 ### Which IP address and port to start on
 # Applies to modes: Master, server
@@ -19,7 +23,7 @@ port = 31337
 ### The following directories will be indexed
 # Applies to modes: Master, server
 watchDirs = [
-	#"/path/on/disk"
+  "/home/jag/newvideo/"
 ]
 
 ### What media player that will be used
@@ -38,5 +42,5 @@ server_port = 31337;
 ### Maps local directories to server
 # Applies to modes: Slave
 mapped_directories = {
-	#"/path/on/server" : "/path/on/slave"
+  #"/path/on/server" : "/path/on/slave"
 }

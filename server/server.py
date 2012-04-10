@@ -7,31 +7,36 @@ sys.path.insert(0, working_folder + "/server/core")
 from api import *
 from db import *
 from sync import *
+from watcher import *
 from classifier import *
 from collector import *
 
 class Server(Thread):
-	def __init__(self):
-		Thread.__init__(self)
-	def run(self):
-		db = Db()
-		classifier = Classifier()
+  def __init__(self):
+    Thread.__init__(self)
+  def run(self):
+    db = Db()
+    classifier = Classifier()
 
-		s = Sync(db, classifier)
+    s = Sync(db, classifier)
 
-		if config.initsync:
-			print "Doing initial sync..."
-			s.initSync()
-			print "Initial syncing done!"
+    if config.initsync:
+      print "Doing initial sync..."
+      s.initSync()
+      print "Initial syncing done!"
 
-		print "Starting collector..."
-		collector = Collector()
-		collector.start()
+    if config.dynamicWatch:
+      print "Launching watcher deamon"
+      watcher = Watcher(classifier, db)
 
-		print "Starting server at " + str(config.ip) + ":" + str(config.port)
-		api = Api(db, s)
+    print "Starting collector..."
+    collector = Collector()
+    collector.start()
 
-		print "Now listening..."
-		api.start()
+    print "Starting server at " + str(config.ip) + ":" + str(config.port)
+    api = Api(db, s)
 
-		db.disconnect()
+    print "Now listening..."
+    api.start()
+
+    db.disconnect()
