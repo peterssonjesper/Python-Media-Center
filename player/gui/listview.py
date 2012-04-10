@@ -16,7 +16,7 @@ class ListView:
 		self.poster = False
 		self.posterData = False
 		self.max_positions = int((self.window.get_resolution()['height']-70)/50.0-1)
-		self.hl_img = ImageTk.PhotoImage(file="gui/images/highlighter.png");
+		self.hl_img = ImageTk.PhotoImage(file="player/gui/images/highlighter.png");
 		self.window.register("listview", self.keypressAction)
 		self.hoverTime = 0.05
 		self.hoverTimer = Timer(self.hoverTime, self.triggerHoverFn);

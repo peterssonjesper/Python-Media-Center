@@ -6,7 +6,7 @@ class Msg:
 	def __init__(self, window):
 		self.window = window
 		self.msgCanvas = False
-		self.msg_img = ImageTk.PhotoImage(file="gui/images/msg_bg.png");
+		self.msg_img = ImageTk.PhotoImage(file="player/gui/images/msg_bg.png");
 		self.window.register("msg", self.keypressAction)
 	
 	def viewMsg(self, string):

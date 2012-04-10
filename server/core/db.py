@@ -2,8 +2,8 @@ import sqlite3, os
 
 class Db:
 	def __init__(self):
-		create_db = not os.path.exists("db/db.sqlite") or os.path.getsize("db/db.sqlite") == 0
-		self.conn = sqlite3.connect('db/db.sqlite')
+		create_db = not os.path.exists("server/db/db.sqlite") or os.path.getsize("server/db/db.sqlite") == 0
+		self.conn = sqlite3.connect('server/db/db.sqlite')
 		self.cursor = self.conn.cursor()
 		if create_db:
 			print "Could not locate DB, will create a new one"

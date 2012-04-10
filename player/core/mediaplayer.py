@@ -1,7 +1,7 @@
 import subprocess, config, os
 from threading import Timer
 
-class Player:
+class Mediaplayer:
 	def __init__(self):
 		self.startedTime = 1
 		self.onStartedFn = False

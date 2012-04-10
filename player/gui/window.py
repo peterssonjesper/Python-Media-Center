@@ -18,7 +18,7 @@ class Window:
 
 	def setBackgroundImage(self):
 		self.bg = Canvas(self.root, width=self.resolution['width'], height=self.resolution['height'], bg="black", highlightthickness=0);
-		self.bg.img = ImageTk.PhotoImage(file="gui/images/bg.png");
+		self.bg.img = ImageTk.PhotoImage(file="player/gui/images/bg.png");
 		self.bg.create_image(self.resolution['width']/2, self.resolution['height']/2, image=self.bg.img);
 	
 		self.content = Canvas(self.frame, width=self.resolution['width'], height=self.resolution['height']);

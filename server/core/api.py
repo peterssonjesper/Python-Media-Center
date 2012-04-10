@@ -1,20 +1,18 @@
-import socket
-import json
-import config
-import sys
-import os
+import socket, json, config, sys, os, time
 
 class Api:
 	def __init__(self, db, sync):
 		self.db = db
 		self.sync = sync
-		try:
-			self.s = socket.socket()
-			self.s.bind((config.ip, config.port))
-			self.s.listen(5)
-		except:
-			print "Could not start socket... Permissions?"
-			sys.exit(0)
+		while True:
+			try:
+				self.s = socket.socket()
+				self.s.bind((config.ip, config.port))
+				self.s.listen(5)
+				break
+			except:
+				print "Could not start socket! Will try again in 10 seconds..."
+				time.sleep(10)
 
 	def start(self):
 		while True:
@@ -77,7 +75,7 @@ class Api:
 
 				if data['cmd'] == "getposter":
 					media_id = data['media_id']
-					path = "posters/" + str(media_id) + ".jpg" if os.path.exists("posters/" + str(media_id) + ".jpg") else "posters/unknown.jpg"
+					path = "server/db/posters/" + str(media_id) + ".jpg" if os.path.exists("server/db/posters/" + str(media_id) + ".jpg") else "server/db/posters/unknown.jpg"
 					f = open(path, "r")
 					c.send(f.read())
 					f.close()

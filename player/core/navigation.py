@@ -3,9 +3,9 @@ from msg import *
 from file import *
 
 class Navigation:
-	def __init__(self, listview, player, api, window):
+	def __init__(self, listview, mediaplayer, api, window):
 		self.listView = listview;
-		self.player = player;
+		self.mediaplayer = mediaplayer;
 		self.window = window
 		self.msg = Msg(self.window);
 		self.listView.onAction(self.onListViewAction)
@@ -141,13 +141,13 @@ class Navigation:
 
 		elif self.currentView == "episodes":
 			self.msg.viewMsg("Loading episode, please wait...")
-			self.player.play_file(item.getAttr("file").get_path())
-			self.player.onStarted(self.msg.hideMsg);
+			self.mediaplayer.play_file(item.getAttr("file").get_path())
+			self.mediaplayer.onStarted(self.msg.hideMsg);
 
 		elif self.currentView == "movies":
 			self.msg.viewMsg("Loading movie, please wait...")
-			self.player.play_file(item.getAttr("file").get_path())
-			self.player.onStarted(self.msg.hideMsg);
+			self.mediaplayer.play_file(item.getAttr("file").get_path())
+			self.mediaplayer.onStarted(self.msg.hideMsg);
 
 	def onEscape(self, listItem):
 		if self.currentView == "tv" or self.currentView == "movies":
