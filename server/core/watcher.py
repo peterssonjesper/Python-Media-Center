@@ -19,26 +19,26 @@ class Watcher:
       self.db = db
       self.wm = wm
     def process_IN_CREATE(self, event):
-      if not(event.dir):
-        type = self.classifier.getType(event.path, event.name)
-        if type > 0:
-          base_dir = [watchDir for watchDir in config.watchDirs if (watchDir in event.path)][0]
-          inner_dir = event.path.replace(base_dir,'')
-          dirName = event.path.split("/")[-1];
-          info = self.classifier.getInfo(dirName, event.pathname, type)
-          data = {
-          "title" : info[0],
-          "base_dir" : base_dir,
-          "inner_dir" : inner_dir,
-          "filename" : event.pathname,
-          "media_type" : type,
-          "season" : info[1],
-          "episode" : info[2],
-          "failbit" : info[3]
-          }
-          #TODO Insert file into database
-          self.files_found += 1
-        else:
-          print "Unsupported type"
+      type = self.classifier.getType(event.path, event.name)
+      if not(event.dir) and type > 0:
+        base_dir = [watchDir for watchDir in config.watchDirs if (watchDir in event.path)][0]
+        inner_dir = event.path.replace(base_dir,'')
+        dirName = event.path.split("/")[-1];
+        info = self.classifier.getInfo(dirName, event.pathname, type)
+        data = {
+        "title" : info[0],
+        "base_dir" : base_dir,
+        "inner_dir" : inner_dir,
+        "filename" : event.pathname,
+        "media_type" : type,
+        "season" : info[1],
+        "episode" : info[2],
+        "failbit" : info[3]
+        }
+        self.db.insert_file(data)
+        print "Inserted ", info[0], info[1], info[2]
     def process_IN_DELETE(self, event):
-      #TODO Delete file from database
+      type = self.classifier.getType(event.path, event.name)
+      if not(event.dir) and type > 0:
+        self.db.delete_file(event.pathname)
+        print "Deleted ", event.pathname

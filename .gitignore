@@ -1,2 +1,2 @@
 *.pyc
-server/db/db.sqlite
+server/db/db.*
