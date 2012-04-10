@@ -71,7 +71,7 @@ class ListView:
 
 	def keypressAction(self, event):
 		oldVals = self.getSelectedIndex()
-		if event.keycode == 8255233 or event.keycode == 116: # Arrow down
+		if event.keycode == 8255233 or event.keycode == 116 or event.keycode == 133: # Arrow down
 			if self.hlPos < self.max_positions-1 and self.hlPos < len(self.listItems)-1:
 				self.hlPos += 1
 				self.window.get_bg().move(self.hl, 0, 50);
@@ -94,7 +94,7 @@ class ListView:
 			self.printListItems(oldVals);
 			self.triggerHover();
 
-		elif event.keycode == 8320768 or event.keycode == 111: # Arrow up
+		elif event.keycode == 8320768 or event.keycode == 111 or event.keycode == 134: # Arrow up
 			if self.hlPos > 0:
 				self.hlPos -= 1
 				self.window.get_bg().move(self.hl, 0, -50);
@@ -105,7 +105,7 @@ class ListView:
 				self.printListItems(oldVals);
 				self.triggerHover();
 
-		elif event.keycode == 2359309 or event.keycode == 36: # Enter
+		elif event.keycode == 2359309 or event.keycode == 36 or event.keycode == 44: # Enter
 			selectedItem = self.scope[0]+self.hlPos
 			self.onActionFn("enter", self.listItems[selectedItem])
 			self.triggerHover();
