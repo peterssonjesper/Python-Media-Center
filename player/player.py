@@ -7,7 +7,7 @@ sys.path.insert(0, working_folder + "/player/gui")
 sys.path.insert(0, working_folder + "/player/core")
 
 from mediaplayer import *
-from listview import *
+#from listview import *
 from window import *
 from navigation import *
 from apiclient import *
@@ -16,11 +16,11 @@ class Player():
 	def run(self):
 		self.window = Window()
 		self.mediaplayer = Mediaplayer();
-		self.listView = ListView(self.window)
+		#self.listView = ListView(self.window)
 		self.api = Apiclient()
-		self.navigation = Navigation(self.listView, self.mediaplayer, self.api, self.window)
+		#self.navigation = Navigation(self.listView, self.mediaplayer, self.api, self.window)
 
-		self.navigation.showRoot()
-		self.listView.printListItems();
+		#self.navigation.showRoot()
+		#self.listView.printListItems();
 
 		self.window.render()
