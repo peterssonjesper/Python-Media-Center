@@ -36,7 +36,11 @@ class Api:
 
         elif data['cmd'] == "getmovieposter":
           id = data['id']
-          path = "server/db/posters/movies/" + str(id) + ".jpg" if os.path.exists("server/db/posters/movies/" + str(id) + ".jpg") else "server/db/posters/unknown.jpg"
+          try:
+            format = data['format']
+          except:
+            format = "original"
+          path = "server/db/posters/movies/" + str(id) + "_" + format + ".jpg" if os.path.exists("server/db/posters/movies/" + str(id) + "_" + format + ".jpg") else "server/db/posters/unknown.jpg"
           f = open(path, "r")
           c.send(f.read())
           f.close()

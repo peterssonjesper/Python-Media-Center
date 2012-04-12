@@ -8,13 +8,13 @@ class Apiclient:
 		return ans
 
 	def getSeasons(self, media_id):
-		ans = self.sendData({"cmd" : "getseasons", "media_id" : media_id})
+		ans = self.sendData({"cmd" : "getseasons", "id" : media_id})
 		if not ans:
 			return []
 		return ans
 
 	def getEpisodes(self, media_id, season):
-		ans = self.sendData({"cmd" : "getepisodes", "media_id" : media_id, "season" : season})
+		ans = self.sendData({"cmd" : "getepisodes", "id" : media_id, "season" : season})
 		if not ans:
 			return []
 		return ans
@@ -25,14 +25,8 @@ class Apiclient:
 			return []
 		return ans
 
-	def getMetadata(self, media_id):
-		ans = self.sendData({"cmd" : "getmetadata", "media_id" : media_id})
-		if not ans:
-			return {}
-		return ans
-
-	def getPoster(self, media_id):
-		ans = self.sendData({"cmd" : "getposter", "media_id" : media_id}, False)
+	def getMoviePoster(self, media_id):
+		ans = self.sendData({"cmd" : "getmovieposter", "id" : media_id}, False)
 		if not ans:
 			return ""
 		return ans
