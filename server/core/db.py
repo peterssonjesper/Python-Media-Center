@@ -3,7 +3,7 @@ import sqlite3, os
 class Db:
   def __init__(self):
     create_db = not os.path.exists("server/db/db.sqlite") or os.path.getsize("server/db/db.sqlite") == 0
-    self.conn = sqlite3.connect('server/db/db.sqlite')
+    self.conn = sqlite3.connect('server/db/db.sqlite', check_same_thread = False)
     self.cursor = self.conn.cursor()
     if create_db:
       print "Could not locate DB, will create a new one"
@@ -232,3 +232,6 @@ class Db:
       vals += [data[attr]]
     vals += [id]
     self.cursor.execute(q, vals)
+
+  def delete_file(self, path):
+    self.cursor.execute("delete from files where (base_dir || inner_dir || '/' || filename) =?", [path])

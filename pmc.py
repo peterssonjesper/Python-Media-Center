@@ -1,3 +1,4 @@
+#!/usr/bin/python 
 import sys, os, getopt
 from multiprocessing import Process
 
